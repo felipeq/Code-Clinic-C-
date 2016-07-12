@@ -15,96 +15,111 @@
 #include "BWCGI.h"
 
 // Here be dragons
-const char * const database_filename = "/Users/billw/sqlite3_data/test_database.db";
+const char *const database_filename = "/Users/billw/sqlite3_data/test_database.db";
 
-int main(int argc, const char * argv[])
+int main(int argc, const char *argv[])
 {
-	std::unique_ptr<BWKV> db( new BWKV(database_filename) );
+    std::unique_ptr<BWKV> db(new BWKV(database_filename));
 
-	// Versions n things
-	printf("BWDB version: %s\n", BWDB::version());
-	printf("BWKV version: %s\n", BWKV::version());
-	printf("BWString version: %s\n", BWString::version());
-	printf("BWNumber version: %s\n", BWNumber::version());
-	printf("BWWebGet version: %s\n", BWWebGet::version());
-	printf("BWCGI version: %s\n", BWCGI::version());
-	printf("SQLite version: %s\n",db->get_query_value("SELECT sqlite_version()").c_str());
-	printf("BWKV table version: %s\n", db->get_query_value("SELECT value FROM kv WHERE key = ?", {"db_version"}).c_str());
+    // Versions n things
+    printf("BWDB version: %s\n", BWDB::version());
+    printf("BWKV version: %s\n", BWKV::version());
+    printf("BWString version: %s\n", BWString::version());
+    printf("BWNumber version: %s\n", BWNumber::version());
+    printf("BWWebGet version: %s\n", BWWebGet::version());
+    printf("BWCGI version: %s\n", BWCGI::version());
+    printf("SQLite version: %s\n", db->get_query_value("SELECT sqlite_version()").c_str());
+    printf("BWKV table version: %s\n",
+           db->get_query_value("SELECT value FROM kv WHERE key = ?", {"db_version"}).c_str());
 
-	// let's test BWDB & BWKV !!
-	printf("\nBWDB & BWKV -----\n\n");
+    // let's test BWDB & BWKV !!
+    printf("\nBWDB & BWKV -----\n\n");
 
-	printf("got table?: kv (%d), foo (%d)\n", db->table_exists("kv"), db->table_exists("foo"));
+    printf("got table?: kv (%d), foo (%d)\n", db->table_exists("kv"), db->table_exists("foo"));
 
-	if (!db->status()) {
-		printf("database failed to open.\n");
-		return 0;
-	}
+    if (!db->status())
+    {
+        printf("database failed to open.\n");
+        return 0;
+    }
 
-	printf("db->value()\n");
-	const char * s = db->value("db_version");
-	if (s) {
-		printf("kv db_version is %s\n", s);
-	} else {
-		printf("error: %s\n", db->get_error());
-	}
+    printf("db->value()\n");
+    const char *s = db->value("db_version");
+    if (s)
+    {
+        printf("kv db_version is %s\n", s);
+    } else
+    {
+        printf("error: %s\n", db->get_error());
+    }
 
-	db->value("this", "that");
-	printf("this -> that (%s)\n", db->get_error());
-	s = db->value("this");
-	if (s) {
-		printf("this is %s\n", s);
-	} else {
-		printf("No value (%s)\n", db->get_error());
-	}
+    db->value("this", "that");
+    printf("this -> that (%s)\n", db->get_error());
+    s = db->value("this");
+    if (s)
+    {
+        printf("this is %s\n", s);
+    } else
+    {
+        printf("No value (%s)\n", db->get_error());
+    }
 
-	db->value("this", "other");
-	printf("this -> other (%s)\n", db->get_error());
-	s = db->value("this");
-	if (s) {
-		printf("this is %s\n", s);
-	} else {
-		printf("No value (%s)\n", db->get_error());
-	}
+    db->value("this", "other");
+    printf("this -> other (%s)\n", db->get_error());
+    s = db->value("this");
+    if (s)
+    {
+        printf("this is %s\n", s);
+    } else
+    {
+        printf("No value (%s)\n", db->get_error());
+    }
 
-	s = db->value("foo");
-	if (s) {
-		printf("foo is %s\n", s);
-	} else {
-		printf("foo: no value (%s)\n", db->get_error());
-	}
+    s = db->value("foo");
+    if (s)
+    {
+        printf("foo is %s\n", s);
+    } else
+    {
+        printf("foo: no value (%s)\n", db->get_error());
+    }
 
-	db->value("foo", "bar");
-	s = (*db)["foo"];
-	if (s) {
-		printf("foo is %s\n", s);
-	} else {
-		printf("foo: no value (%s)\n", db->get_error());
-	}
+    db->value("foo", "bar");
+    s = (*db)["foo"];
+    if (s)
+    {
+        printf("foo is %s\n", s);
+    } else
+    {
+        printf("foo: no value (%s)\n", db->get_error());
+    }
 
-	printf("db->prepare_query()\n");
-	printf("SELECT * FROM kv -- \n");
-	db->prepare_query("SELECT * FROM kv", {});
-	while (const BWDB::dbrow * r = db->get_prepared_row()) {
-		for (auto col : *r ) {
-			printf("%s:%s ", col.first.c_str(), col.second.c_str());
-		}
-		printf("\n");
-	}
+    printf("db->prepare_query()\n");
+    printf("SELECT * FROM kv -- \n");
+    db->prepare_query("SELECT * FROM kv", {});
+    while (const BWDB::dbrow *r = db->get_prepared_row())
+    {
+        for (auto col : *r)
+        {
+            printf("%s:%s ", col.first.c_str(), col.second.c_str());
+        }
+        printf("\n");
+    }
 
-	printf("SELECT value FROM kv -- \n");
-	db->prepare_query("SELECT value FROM kv", {});
-	while (BWString rs = db->get_prepared_value()) {
-		printf("rs is [%s]\n", rs.c_str());
-	}
+    printf("SELECT value FROM kv -- \n");
+    db->prepare_query("SELECT value FROM kv", {});
+    while (BWString rs = db->get_prepared_value())
+    {
+        printf("rs is [%s]\n", rs.c_str());
+    }
 
-	printf("db->count()\n");
-	printf("there are %ld rows in the kv table.\n", db->count("kv"));
-	printf("db->del(foo)\n");
-	db->del("foo");
-	printf("there are %ld rows in the kv table.\n", db->count("kv"));
+    printf("db->count()\n");
+    printf("there are %ld rows in the kv table.\n", db->count("kv"));
+    printf("db->del(foo)\n");
+    db->del("foo");
+    printf("there are %ld rows in the kv table.\n", db->count("kv"));
 
-	db.reset();
+    db.reset();
 
 //	// BWString
 //	printf("\nBWString -----\n\n");
@@ -143,7 +158,7 @@ int main(int argc, const char * argv[])
 //    printf("x %s %s <= y %s\n", x.c_str(), x <= y ? "is" : "is not", y.c_str());
 //
 //    puts(x.format("this is %s, that is %s\n", x.c_str(), y.c_str()).c_str());
-	
+
 //	// BWNumber
 //	printf("\nBWNumber -----\n\n");
 //
@@ -243,6 +258,6 @@ int main(int argc, const char * argv[])
 //		printf("%s [%s]\n", q.first.c_str(), q.second.c_str());
 //	}
 
-	return 0;	// Done. Yay!
+    return 0;    // Done. Yay!
 }
 

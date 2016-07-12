@@ -16,47 +16,56 @@
 #include "BWString.h"
 
 #define __BWCGI_VERSION "1.0.5"
-static const char * _bwcgi_kenv_query_string = "QUERY_STRING";
-static const char * _bwcgi_kenv_document_root = "DOCUMENT_ROOT";
-static const char * _bwcgi_kenv_gateway_interface = "GATEWAY_INTERFACE";
-static const char * _bwcgi_kenv_reqeust_method = "REQUEST_METHOD";
-static const char * _bwcgi_kenv_path_info = "PATH_INFO";
-static const char * _bwcgi_kenv_script_name = "SCRIPT_NAME";
-static const char * _bwcgi_kenv_server_software = "SERVER_SOFTWARE";
-static const char * _bwcgi_kenv_content_type = "CONTENT_TYPE";
-static const char * _bwcgi_kenv_cookie = "HTTP_COOKIE";
-static const char * _bwcgi_kenv_user_agent = "HTTP_USER_AGENT";
+static const char *_bwcgi_kenv_query_string = "QUERY_STRING";
+static const char *_bwcgi_kenv_document_root = "DOCUMENT_ROOT";
+static const char *_bwcgi_kenv_gateway_interface = "GATEWAY_INTERFACE";
+static const char *_bwcgi_kenv_reqeust_method = "REQUEST_METHOD";
+static const char *_bwcgi_kenv_path_info = "PATH_INFO";
+static const char *_bwcgi_kenv_script_name = "SCRIPT_NAME";
+static const char *_bwcgi_kenv_server_software = "SERVER_SOFTWARE";
+static const char *_bwcgi_kenv_content_type = "CONTENT_TYPE";
+static const char *_bwcgi_kenv_cookie = "HTTP_COOKIE";
+static const char *_bwcgi_kenv_user_agent = "HTTP_USER_AGENT";
 
-class BWCGI {
-	const BWString _crlf = "\r\n";
-	const BWString _newline = "\n";
-	const BWString _content_type = "Content-type";
+class BWCGI
+{
+    const BWString _crlf = "\r\n";
+    const BWString _newline = "\n";
+    const BWString _content_type = "Content-type";
 
-	BWString _status;
+    BWString _status;
 
-	typedef std::map<BWString, BWString> _envmap;
-	_envmap _env;
-	_envmap _qmap;
+    typedef std::map<BWString, BWString> _envmap;
+    _envmap _env;
+    _envmap _qmap;
 
-	void process_query_string();
-	void message(const char * format, ...);
-	
+    void process_query_string();
+
+    void message(const char *format, ...);
+
 public:
-	typedef _envmap envmap;
-	static const char * version() { return __BWCGI_VERSION; }
+    typedef _envmap envmap;
 
-	BWCGI();
+    static const char *version()
+    { return __BWCGI_VERSION; }
 
-	void disp_page( const BWString & type, const BWString & s );
-	const BWString getvar( const BWString & ) const;
-	const BWString getq( const BWString & ) const;
-	envmap & env();
-	envmap & qmap();
+    BWCGI();
 
-	BWString status() const;
+    void disp_page(const BWString &type, const BWString &s);
 
-	bool have_cgi() const;
-	bool have_query_string() const;
+    const BWString getvar(const BWString &) const;
+
+    const BWString getq(const BWString &) const;
+
+    envmap &env();
+
+    envmap &qmap();
+
+    BWString status() const;
+
+    bool have_cgi() const;
+
+    bool have_query_string() const;
 };
 
 #endif /* defined(__BWLib__BWCGI__) */
