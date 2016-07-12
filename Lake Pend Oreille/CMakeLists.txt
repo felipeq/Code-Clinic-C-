@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(Lake_Pend_Oreille)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -L. -lsqlite3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(LDFLAGS "-L. -lsqlite3")
 set(SOURCE_FILES
     BWLib/BWCGI.cpp
     BWLib/BWCGI.h
@@ -17,4 +18,5 @@ set(SOURCE_FILES
     BWLPO.h
     main.cpp)
 
-add_executable(Lake_Pend_Oreille ${SOURCE_FILES})
+add_executable(Lake_Pend_Oreille ${SOURCE_FILES} )
+target_link_libraries(Lake_Pend_Oreille ${LDFLAGS})
