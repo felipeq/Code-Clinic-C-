@@ -15,7 +15,7 @@
 #include "BWString.h"
 #include "JPEGData.h"
 
-BWString filepath = "/Users/billw/Desktop/Images";
+BWString filepath = "Images";
 BWString ref_file = "78771293.jpg";
 
 int main(int argc, const char * argv[])
