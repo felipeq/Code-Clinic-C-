@@ -1,0 +1,39 @@
+/* table.css by Bill Weinman http://bw.org/contact/
+  v 1.0 - 2014-07-02
+*/
+
+h2.table-head h1.doc-head {
+    line-height: 0.25;
+    margin-top: 1em;
+}
+
+h1.doc-head {
+    color: #600;
+}
+
+h2.table-head {
+    color: #036;
+}
+
+table.table1 {
+    border: #ddd solid 1px;
+    border-collapse: collapse;
+    margin: 20px 20px 20px 20px;
+}
+
+.table1 tr, .table1 th, .table1 td {
+    padding: 3px;
+    text-align: left;
+}
+
+.table1 th {
+    font-family: tahoma;
+    background-color: #ffa;
+}
+
+.table1 td {
+    background-color: #ccd;
+    font-family: tahoma;
+    border: 1px solid white;
+}
+
